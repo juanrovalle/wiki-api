@@ -10,9 +10,9 @@ export class FeedService {
   // Fetch Wikipedia featured content
   async getFeaturedContent(date: string, language: string = 'en') {
     try {
-      console.log(`${this.WIKIPEDIA_API_URL}/featured/${date}`);
+      console.log(`{this.WIKIPEDIA_API_URL}${language}/featured/${date}`);
       const response = await axios.get(
-        `${this.WIKIPEDIA_API_URL}/${language}/featured/${date}`,
+        `${this.WIKIPEDIA_API_URL}${language}/featured/${date}`,
         {},
       );
 

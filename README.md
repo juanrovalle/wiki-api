@@ -1,40 +1,65 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Wikipedia API Proxy
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a **NestJS** API that serves as a proxy for the **Wikipedia Featured Content API** and includes translation functionality using the **LibreTranslate API**. The API fetches featured content from Wikipedia for a specific date and allows translation of content into different languages.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Project Overview
 
-## Description
+This project contains two main functionalities:
+1. **Wikipedia Featured Content Proxy**: Fetches featured content from the Wikipedia API based on a date.
+2. **Translation of Featured Content**: Uses the LibreTranslate API to translate the fetched Wikipedia content into a specified language.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Endpoints:
 
-## Project setup
+- **GET `/feed`**: Fetch featured content for a given date and language.
+- **GET `/feed/translate/:language`**: Fetch and translate featured content for a given date into the specified language.
+
+## Technologies Used
+
+- **NestJS**: A progressive Node.js framework for building efficient and scalable server-side applications.
+- **Axios**: For making HTTP requests to the Wikipedia and LibreTranslate APIs.
+- **TypeScript**: For static typing and better developer experience.
+- **Jest**: For unit testing.
+
+## Prerequisites
+docker pull libretranslate/libretranslate
+- **Node.js** (v14 or higher)
+- **npm** (v6 or higher)
+- **LibreTranslate API**: You can either use a self-hosted LibreTranslate instance or an external service.
+
+## External Services
+LibreTranslate API Locally via Docker
+Using Docker is the easiest way to run LibreTranslate locally. Here's how you can set it up:
+
+**Step 1: Install Docker**
+If you don’t have Docker installed, you can download and install it from Docker's official website.
+
+**Step 2: Pull and Run the LibreTranslate Docker Image**
+Run the following commands to pull and run the LibreTranslate image
+```bash
+## Pull from DockerHub
+docker pull libretranslate/libretranslate
+## Run libre translate
+docker run -d -p 5000:5000 libretranslate/libretranslate
+
+```
+- **Node.js** (v14 or higher)
+- **npm** (v6 or higher)
+- **LibreTranslate API**: You can either use a self-hosted LibreTranslate instance or an external service.
+
+## Environment Variables
+
+To configure the Wikipedia and LibreTranslate APIs, create a `.env` file in the root directory with the following content:
 
 ```bash
-$ npm install
+## Project setup
+WIKIPEDIA_API_URL=https://en.wikipedia.org/api/rest_v1/feed
+LIBRETRANSLATE_API_URL=https://libretranslate.com/translate
+LIBRETRANSLATE_SUPPORTED_LANGUAGES=en,es,fr,de,it
 ```
 
 ## Compile and run the project
 
-```bash
+```
 # development
 $ npm run start
 
@@ -44,41 +69,20 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
-
 ## Run tests
 
 ```bash
 # unit tests
 $ npm run test
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
+#testCoverage
 $ npm run test:cov
 ```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## PENDING
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Juan R. Ovalle](https://x.com/JuanRovalle)
 
 ## License
 

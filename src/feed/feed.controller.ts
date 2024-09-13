@@ -5,8 +5,11 @@ import {
   HttpStatus,
   Param,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { FeedService } from './feed.service';
+import { LanguageValidationPipe } from './language-validation.pipe'; // Import the validation pipe
+import { DateValidationPipe } from './date-validation.pipe';
 
 @Controller('feed')
 export class FeedController {
@@ -14,28 +17,34 @@ export class FeedController {
 
   @Get()
   async getFeed(
-    @Query('date') date: string,
+    @Query('date', DateValidationPipe) date: string, // Apply DateValidationPipe for YYYY/MM/DD format
     @Query('language') language: string,
   ) {
-    console.log('entre');
-
-    return this.feedService.getFeaturedContent(date, language);
+    try {
+      return await this.feedService.getFeaturedContent(date, language);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_GATEWAY);
+    }
   }
 
-  //  Wikipedia API and translate content
+  // Proxy Wikipedia API and translate content
   @Get('translate/:language')
   async translateFeed(
-    @Query('date') date: string,
-    @Param('language') language: string,
+    @Query('date', DateValidationPipe) date: string, // Apply the DateValidationPipe here as well
+    @Param('language', LanguageValidationPipe) language: string // Apply it only to the language param
   ) {
-    const data = await this.feedService.getFeaturedContent(date);
+    try {
+      const data = await this.feedService.getFeaturedContent(date);
 
-    // Translate the title and extract
-    const translatedData = {
-      title: await this.feedService.translateText(data.tfa.title, language),
-      extract: await this.feedService.translateText(data.tfa.extract, language),
-    };
+      // Translate the title and the extract using the translation service
+      const translatedData = {
+        title: await this.feedService.translateText(data.tfa.title, language),
+        extract: await this.feedService.translateText(data.tfa.extract, language),
+      };
 
-    return translatedData;
+      return translatedData;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_GATEWAY);
+    }
   }
 }
